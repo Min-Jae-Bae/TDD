@@ -15,12 +15,17 @@ package com.example.tdd
 
 
 enum class PasswordStrength {
-    STRONG
+    STRONG,
+    NORMAL
 
 }
 
 class PasswordStrengthMeter {
     fun meter(s: String): PasswordStrength {
+        // 8글자 미만이면 NORMAL 값 리턴
+        if (s.length < 8) {
+            return PasswordStrength.NORMAL
+        }
         return PasswordStrength.STRONG
     }
 
