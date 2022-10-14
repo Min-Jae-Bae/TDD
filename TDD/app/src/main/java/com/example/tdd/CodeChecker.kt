@@ -1,7 +1,6 @@
 package com.example.tdd
 
 
-
 /*
 암호 검사기 규칙에 따라 암호를 강함, 보통, 약함
 
@@ -33,25 +32,44 @@ package com.example.tdd
 
 enum class PasswordStrength {
     STRONG,
-    NORMAL
+    NORMAL,
+    INVALID
 
 }
 
 class PasswordStrengthMeter {
-    fun meter(s: String): PasswordStrength {
+    fun meter(s: String?): PasswordStrength {
+        // 값이 없을 때 ,공백 값일 때
+        if (s == null || s.isEmpty()) return PasswordStrength.INVALID
         // 8글자 미만이면 NORMAL 값 리턴
         if (s.length < 8) {
             return PasswordStrength.NORMAL
         }
 
         // 숫자를 받아 포함되어 있는지 true, false 저장
-        val containNumber = meetSContainingNumberCriteria(s)
+        val containNumber = meetsContainingNumberCriteria(s)
         if (!containNumber) return PasswordStrength.NORMAL
+
+        val containUppercase = meetsContainingUppercaseCriteria(s)
+        if (!containUppercase) return PasswordStrength.NORMAL
 
         return PasswordStrength.STRONG
     }
-    // 문자를 받아 숫자가 포함되어 있는지 확인해주는 기능
-    private fun meetSContainingNumberCriteria(s: String): Boolean {
+
+    // 문자를 받아 대문자가 포함되어 있는지 확인해 주는 기능
+    private fun meetsContainingUppercaseCriteria(s: String): Boolean {
+        for (i in s.indices) {
+            val char = s[i]
+            if (char.isUpperCase()) {
+                return true
+            }
+        }
+        return false
+    }
+
+
+    // 문자를 받아 숫자가 포함되어 있는지 확인해주는 기능. 변수 중복 제거 리턴 값을 함수 Boolean 으로
+    private fun meetsContainingNumberCriteria(s: String): Boolean {
         for (i in s.indices) {
             val char = s[i]
             if (char in '0'..'9') {

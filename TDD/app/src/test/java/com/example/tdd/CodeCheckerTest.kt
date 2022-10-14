@@ -34,10 +34,28 @@ class CodeCheckerTest {
             assertStrength("!@ah!gf#", PasswordStrength.NORMAL)
         }
 
-        private fun assertStrength(password: String, expectedString: PasswordStrength) {
+        @DisplayName("null 값일 때 테스트")
+        @Test
+        fun `When null input expect invalid `() {
+            assertStrength(null, PasswordStrength.INVALID)
+        }
+
+        @DisplayName("공백 값일 때 테스트 ")
+        @Test
+        fun `When empty input expect invalid `() {
+            assertStrength("", PasswordStrength.INVALID)
+        }
+
+        @DisplayName("대문자를 포함하지 않고 나머지 충족하는 테스트")
+        @Test
+        fun `When meet all criteria except for uppercase expect normal`() {
+            assertStrength("!aa1#3ds", PasswordStrength.NORMAL)
+        }
+
+        private fun assertStrength(password: String?, expectedStrength: PasswordStrength) {
             val meter = PasswordStrengthMeter()
             val result: PasswordStrength = meter.meter(password)
-            assertEquals(expectedString, result)
+            assertEquals(expectedStrength, result)
         }
     }
 }
