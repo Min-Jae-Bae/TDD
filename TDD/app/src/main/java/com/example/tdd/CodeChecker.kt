@@ -81,6 +81,7 @@ class PasswordStrengthMeter {
 
 
     // 문자를 받아 숫자가 포함되어 있는지 확인해주는 기능. 변수 중복 제거 리턴 값을 함수 Boolean 으로
+    // TODO: 기능에 문제점이 있다. 다시 확인해 보자
     private fun meetsContainingNumberCriteria(s: String): Boolean {
         for (i in s.indices) {
             val char = s[i]
