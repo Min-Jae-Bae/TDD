@@ -52,6 +52,18 @@ class CodeCheckerTest {
             assertStrength("!aa1#3ds", PasswordStrength.NORMAL)
         }
 
+        @DisplayName("길이가 8글자 이상인 조건만 충족하는 테스트")
+        @Test
+        fun `When meet only less than 8 characters criteria expect weak`() {
+            assertStrength("abcdefgji", PasswordStrength.WEAK)
+        }
+
+        @DisplayName("숫자 포함 조건만 충족하는 테스트")
+        @Test
+        fun `When meet only number criteria expect weak`() {
+            assertStrength("12345", PasswordStrength.WEAK)
+        }
+
         private fun assertStrength(password: String?, expectedStrength: PasswordStrength) {
             val meter = PasswordStrengthMeter()
             val result: PasswordStrength = meter.meter(password)

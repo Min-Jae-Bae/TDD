@@ -33,7 +33,8 @@ package com.example.tdd
 enum class PasswordStrength {
     STRONG,
     NORMAL,
-    INVALID
+    INVALID,
+    WEAK
 
 }
 
@@ -45,12 +46,23 @@ class PasswordStrengthMeter {
         if (s.length < 8) {
             return PasswordStrength.NORMAL
         }
+        // 길이가 8글자 이상을 충족하는 조건
+        val lengthEnough = s.length >= 8
 
-        // 숫자를 받아 포함되어 있는지 true, false 저장
+        // 숫자를 받아 포함되어 있는 조건
         val containNumber = meetsContainingNumberCriteria(s)
-        if (!containNumber) return PasswordStrength.NORMAL
 
+        // 대문자가 포함되어 있는 조건
         val containUppercase = meetsContainingUppercaseCriteria(s)
+
+
+        // 길이가 8글자만 충족할 때
+        if (lengthEnough && !containNumber && !containUppercase) return PasswordStrength.WEAK
+        // 숫자 포함 조건만 충족할 때
+        if (!lengthEnough && containNumber && !containUppercase) return PasswordStrength.WEAK
+
+        if (!lengthEnough) return PasswordStrength.NORMAL
+        if (!containNumber) return PasswordStrength.NORMAL
         if (!containUppercase) return PasswordStrength.NORMAL
 
         return PasswordStrength.STRONG
