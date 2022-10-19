@@ -33,39 +33,38 @@ package com.example.tdd
 enum class PasswordStrength {
     STRONG,
     NORMAL,
-    INVALID,
-    WEAK
+    WEAK,
+    INVALID
 
 }
 
 class PasswordStrengthMeter {
+
     fun meter(s: String?): PasswordStrength {
         // 값이 없을 때 ,공백 값일 때
         if (s == null || s.isEmpty()) return PasswordStrength.INVALID
-        // 8글자 미만이면 NORMAL 값 리턴
-        if (s.length < 8) {
-            return PasswordStrength.NORMAL
-        }
-        // 길이가 8글자 이상을 충족하는 조건
-        val lengthEnough = s.length >= 8
 
-        // 숫자를 받아 포함되어 있는 조건
-        val containNumber = meetsContainingNumberCriteria(s)
-
-        // 대문자가 포함되어 있는 조건
-        val containUppercase = meetsContainingUppercaseCriteria(s)
-
-
-        // 길이가 8글자만 충족할 때
-        if (lengthEnough && !containNumber && !containUppercase) return PasswordStrength.WEAK
-        // 숫자 포함 조건만 충족할 때
-        if (!lengthEnough && containNumber && !containUppercase) return PasswordStrength.WEAK
-
-        if (!lengthEnough) return PasswordStrength.NORMAL
-        if (!containNumber) return PasswordStrength.NORMAL
-        if (!containUppercase) return PasswordStrength.NORMAL
+        // 조건을 만족하는 횟수 기능
+        val metCounts = getMetCriteriaCounts(s)
+        // 조건이 한번만 만족하는,조건이 모두 만족하지 않는 중복 해결
+        if (metCounts <= 1) return PasswordStrength.WEAK
+        // 조건이 두번 만족하는 중복 해결
+        if (metCounts == 2) return PasswordStrength.NORMAL
 
         return PasswordStrength.STRONG
+    }
+
+    private fun getMetCriteriaCounts(s: String): Int {
+
+        var metCounts = 0
+        // 길이가 8글자 이상을 충족하는 조건
+        if (s.length >= 8) metCounts++
+        // 숫자를 받아 포함되어 있는 조건
+        if (meetsContainingNumberCriteria(s)) metCounts++
+        // 대문자가 포함되어 있는 조건
+        if (meetsContainingUppercaseCriteria(s)) metCounts++
+
+        return metCounts
     }
 
     // 문자를 받아 대문자가 포함되어 있는지 확인해 주는 기능

@@ -31,7 +31,7 @@ class CodeCheckerTest {
         @DisplayName("숫자를 포함하지 않고 나머지 충족하는 테스트")
         @Test
         fun `When meet all criteria except for number expect normal`() {
-            assertStrength("!@ah!gf#", PasswordStrength.NORMAL)
+            assertStrength("!@aH!gf#", PasswordStrength.NORMAL)
         }
 
         @DisplayName("null 값일 때 테스트")
@@ -55,7 +55,7 @@ class CodeCheckerTest {
         @DisplayName("길이가 8글자 이상인 조건만 충족하는 테스트")
         @Test
         fun `When meet only less than 8 characters criteria expect weak`() {
-            assertStrength("abcdefgji", PasswordStrength.WEAK)
+            assertStrength("ab!cde!fg!ji", PasswordStrength.WEAK)
         }
 
         @DisplayName("숫자 포함 조건만 충족하는 테스트")
@@ -64,6 +64,19 @@ class CodeCheckerTest {
             assertStrength("12345", PasswordStrength.WEAK)
         }
 
+        @DisplayName("대문자 포함 조건만 충족하는 테스트")
+        @Test
+        fun `When meet only uppercase criteria expect weak`() {
+            assertStrength("afgA!@#", PasswordStrength.WEAK)
+        }
+
+        @DisplayName("모든 조건을 충족하지 않는 테스트")
+        @Test
+        fun `When meet no criteria expect weak`() {
+            assertStrength("cgv", PasswordStrength.WEAK)
+        }
+
+        // 메소드를 만들어 중복을 제거
         private fun assertStrength(password: String?, expectedStrength: PasswordStrength) {
             val meter = PasswordStrengthMeter()
             val result: PasswordStrength = meter.meter(password)
