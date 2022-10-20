@@ -7,7 +7,6 @@ import org.junit.jupiter.api.DisplayName
 /*
  생성자와, 비밀번호, 측정이 중복되었다.
  하나의 기능으로 뽑았다.
-
  */
 
 class CodeCheckerTest {
